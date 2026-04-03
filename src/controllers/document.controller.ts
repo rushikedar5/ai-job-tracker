@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
 import { prisma } from "../libs/prisma";
+import aiClient from "../libs/groq";
+import fs from "fs";
+import pdfParse from "pdf-parse";
 
 export const uploadDocument = async (req: Request, res: Response) => {
   const file = req.file;
@@ -21,8 +24,40 @@ export const uploadDocument = async (req: Request, res: Response) => {
         userId,
       },
     });
+
+    const fileBuffer = fs.readFileSync(file.path);
+    const pdfData = await pdfParse(fileBuffer);
+    const resumeText = pdfData.text;
+
+    const response = await aiClient.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert HR consultant and resume reviewer. Always respond with valid JSON only. No markdown, no extra text.",
+        },
+        {
+          role: "user",
+          content: `Review this resume and respond with this exact JSON structure:
+        {
+            "ats score": <number out of 100>,
+            "strengths": [<list of strings>],
+            "improvements": [<list of strings>],
+            "suggestions": [<list of strings>]
+        }
+
+            Resume:
+            ${resumeText}`,
+        },
+      ],
+    });
+
+    const feedback = JSON.parse(response.choices[0].message.content!);
+
     return res.status(201).json({
-      fileContent,
+      document: fileContent,
+      feedback,
     });
   } catch (err) {
     return res.status(500).json({
