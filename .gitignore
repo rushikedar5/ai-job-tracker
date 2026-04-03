@@ -1,13 +1,20 @@
-node_modules
-# Keep environment variables out of version control
-.env
+# dependencies
+backend/node_modules
+frontend/node_modules
 
-/generated/prisma
+# environment variables
+backend/.env
+frontend/.env
 
-/src/generated/prisma
+# prisma generated
+backend/src/generated/prisma
 
-/src/generated/prisma
+# uploads
+backend/uploads/
 
-/generated/prisma
+# next.js
+frontend/.next/
+frontend/out/
 
-uploads/
+# build
+backend/dist/
