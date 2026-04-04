@@ -2,27 +2,34 @@
 
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-semibold mb-6">About JobTracker</h1>
+    <div className="max-w-5xl mx-auto px-6 py-16 space-y-8">
+      <h1 className="text-3xl font-semibold">About JobTracker</h1>
 
-      <p className="text-gray-600 mb-4">
-        JobTracker is a simple and powerful platform designed to help job seekers
-        manage their job applications efficiently.
-      </p>
-
-      <p className="text-gray-600 mb-4">
-        Instead of tracking applications in spreadsheets or notes, JobTracker
-        provides a structured way to organize your job search, monitor progress,
-        and stay consistent.
-      </p>
-
-      <p className="text-gray-600 mb-4">
-        With features like application tracking and AI-powered resume review,
-        our goal is to help you land your next opportunity faster.
+      <p className="text-gray-600">
+        JobTracker is an AI-powered platform designed to simplify and improve
+        the job application process. Managing multiple applications across
+        companies can be overwhelming — we bring everything into one place.
       </p>
 
       <p className="text-gray-600">
-        Built with a focus on simplicity, speed, and real-world usability.
+        With built-in tracking, structured workflows, and AI-powered resume
+        analysis, JobTracker helps you stay organized and make better decisions
+        during your job search.
+      </p>
+
+      <div className="space-y-3">
+        <h2 className="text-xl font-medium">What we offer</h2>
+        <ul className="list-disc pl-6 text-gray-600 space-y-1">
+          <li>Centralized job application tracking</li>
+          <li>Real-time status updates</li>
+          <li>AI-based resume feedback with actionable insights</li>
+          <li>Simple and distraction-free dashboard</li>
+        </ul>
+      </div>
+
+      <p className="text-gray-600">
+        Our mission is to make job searching more structured, less stressful,
+        and more effective.
       </p>
     </div>
   )

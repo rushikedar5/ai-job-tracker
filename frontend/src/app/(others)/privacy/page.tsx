@@ -1,43 +1,86 @@
 // app/privacy/page.tsx
 
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | JobTracker",
+  description: "Learn how JobTracker collects and protects your data.",
+}
+
+const sections = [
+  "Information We Collect",
+  "How We Use Data",
+  "Data Sharing",
+  "Data Retention",
+  "Your Rights",
+  "Security",
+  "Updates",
+  "Contact",
+]
+
 export default function PrivacyPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-semibold mb-6">Privacy Policy</h1>
+    <main className="max-w-3xl mx-auto px-6 py-16">
+      {/* Header */}
+      <header className="mb-12 space-y-4">
+        <h1 className="text-4xl font-semibold tracking-tight">
+          Privacy Policy
+        </h1>
 
-      <p className="text-gray-600 mb-4">
-        Your privacy is important to us. This policy explains how we collect,
-        use, and protect your data.
-      </p>
+        <p className="text-gray-600 leading-relaxed">
+          Your privacy is important to us. This Privacy Policy explains how
+          JobTracker collects, uses, and protects your information when you use
+          our platform.
+        </p>
 
-      <h2 className="text-xl font-medium mt-6 mb-2">Information We Collect</h2>
-      <p className="text-gray-600 mb-4">
-        We may collect basic user information such as email, job applications,
-        and uploaded resumes.
-      </p>
+        <p className="text-sm text-gray-500">
+          Last updated: January 1, 2026
+        </p>
+      </header>
 
-      <h2 className="text-xl font-medium mt-6 mb-2">How We Use Data</h2>
-      <p className="text-gray-600 mb-4">
-        Your data is used to provide and improve our services, including tracking
-        applications and generating AI-based feedback.
-      </p>
+      {/* Divider */}
+      <div className="border-t mb-10" />
 
-      <h2 className="text-xl font-medium mt-6 mb-2">Data Security</h2>
-      <p className="text-gray-600 mb-4">
-        We take reasonable measures to protect your data, but no system is
-        completely secure.
-      </p>
+      {/* Content */}
+      <div className="space-y-10">
+        {sections.map((title, index) => (
+          <section key={title} className="space-y-3">
+            <h2 className="text-xl font-semibold">
+              {index + 1}. {title}
+            </h2>
 
-      <h2 className="text-xl font-medium mt-6 mb-2">Third Parties</h2>
-      <p className="text-gray-600 mb-4">
-        We do not sell your data. Some services (like AI tools) may process
-        your data to provide functionality.
-      </p>
+            {title !== "Contact" ? (
+              <p className="text-gray-600 leading-relaxed">
+                This is placeholder content. Replace this with your actual
+                privacy policy details. Keep the language simple, transparent,
+                and legally compliant.
+              </p>
+            ) : (
+              <>
+                <p className="text-gray-600">
+                  If you have any questions about this policy, contact us at:
+                </p>
 
-      <h2 className="text-xl font-medium mt-6 mb-2">Updates</h2>
-      <p className="text-gray-600">
-        This policy may be updated periodically.
-      </p>
-    </div>
+                <a
+                  href="mailto:privacy@jobtracker.com"
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  privacy@jobtracker.com
+                </a>
+              </>
+            )}
+          </section>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <footer className="mt-16 pt-6 border-t">
+        <p className="text-xs text-gray-500">
+          This is a sample privacy policy and may not cover all legal
+          requirements. Please consult a legal professional before using it in a
+          production environment.
+        </p>
+      </footer>
+    </main>
   )
 }

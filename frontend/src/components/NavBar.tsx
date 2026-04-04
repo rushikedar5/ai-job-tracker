@@ -9,25 +9,32 @@ export default function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    if (typeof window !== "undefined") {
-      return !!localStorage.getItem("token")
-    }
-    return false
-  })
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  useEffect(() => {
+  const checkAuth = () => {
     const token = localStorage.getItem("token")
     setIsLoggedIn(!!token)
+  }
+
+  useEffect(() => {
+    checkAuth()
+
+    window.addEventListener("authChanged", checkAuth)
+
+    return () => {
+      window.removeEventListener("authChanged", checkAuth)
+    }
   }, [])
 
   const handleLogout = () => {
     localStorage.removeItem("token")
-    setIsLoggedIn(false)
+
+    // 🔥 THIS triggers UI update
+    window.dispatchEvent(new Event("authChanged"))
+
     router.push("/signin")
   }
 
-  // 🔒 protect routes
   const handleProtectedRoute = (
     e: React.MouseEvent,
     path: string
@@ -46,12 +53,10 @@ export default function Navbar() {
     <nav className="w-full border-b bg-white sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
 
-        {/* Logo */}
         <Link href="/" className="font-semibold text-lg">
           JobTracker
         </Link>
 
-        {/* Links (ALWAYS visible) */}
         <div className="flex items-center gap-6 text-sm">
 
           <Link
@@ -88,7 +93,6 @@ export default function Navbar() {
 
         </div>
 
-        {/* Right side */}
         <div className="flex items-center gap-3">
           {isLoggedIn ? (
             <Button variant="outline" size="sm" onClick={handleLogout}>

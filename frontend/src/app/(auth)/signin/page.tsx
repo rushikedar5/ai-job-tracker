@@ -30,9 +30,14 @@ export default function SignInPage() {
         password,
       })
 
+      // ✅ save token
       localStorage.setItem("token", response.data.token)
 
+      // 🔥 THIS FIXES YOUR PROBLEM (no refresh needed)
+      window.dispatchEvent(new Event("authChanged"))
+
       router.push("/dashboard")
+
     } catch (err: any) {
       setError(err.response?.data?.message || "Invalid email or password")
     } finally {

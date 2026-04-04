@@ -70,8 +70,8 @@ export default function Footer() {
             <h3 className="text-sm font-medium text-gray-900">Company</h3>
             <div className="flex flex-col gap-2 text-sm text-gray-500">
               <Link href="/about" className="hover:text-black">About</Link>
-              <Link href="#" className="hover:text-black">Careers</Link>
-              <Link href="#" className="hover:text-black">Contact</Link>
+              <Link href="/career" className="hover:text-black">Careers</Link>
+              <Link href="/contact" className="hover:text-black">Contact</Link>
             </div>
           </div>
 
