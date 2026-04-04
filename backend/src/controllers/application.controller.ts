@@ -1,5 +1,5 @@
 import { application, type Request, type Response } from "express";
-import { prisma } from "../libs/prisma";
+import prisma from "../libs/prisma";
 
 export const createApplication = async (req: Request, res: Response) => {
   const { company, role, jobDescription, status } = req.body;

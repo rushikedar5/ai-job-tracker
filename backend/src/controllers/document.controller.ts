@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { prisma } from "../libs/prisma";
+import prisma from "../libs/prisma";
 import aiClient from "../libs/groq";
 import fs from "fs";
 import pdfParse from "pdf-parse";
