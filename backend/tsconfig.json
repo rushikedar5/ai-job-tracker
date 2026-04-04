@@ -7,6 +7,6 @@
     "rootDir": "./src",
     "strict": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "prisma/generated/**/*"],
   "exclude": ["node_modules"]
 }
