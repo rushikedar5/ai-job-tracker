@@ -61,7 +61,7 @@ export const uploadDocument = async (req: Request, res: Response) => {
     });
   } catch (err) {
     return res.status(500).json({
-      message: "Internal server error",
+      message: "Internal server error" + err,
     });
   }
 };

@@ -1,19 +1,36 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRoutes from "@/routes/auth.routes"
-import applicationRoutes from "@/routes/application.route";
-import documentRoutes from "@/routes/document.routes";
+import authRoutes from "../src/routes/auth.routes"
+import applicationRoutes from "../src/routes/application.route";
+import documentRoutes from "../src/routes/document.routes";
+import fs from "fs"
 
+if (!fs.existsSync("uploads")) {
+    fs.mkdirSync("uploads")
+}
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-    origin: "https://hirevault.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}))
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://hirevault.vercel.app",
+]
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+    credentials: true,
+  })
+)
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/applications", applicationRoutes);
