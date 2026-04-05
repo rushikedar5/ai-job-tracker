@@ -1,14 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRoutes from "../src/routes/auth.routes"
-import applicationRoutes from "../src/routes/application.route";
-import documentRoutes from "../src/routes/document.routes";
-import fs from "fs"
+import authRoutes from "@/routes/auth.routes"
+import applicationRoutes from "@/routes/application.route";
+import documentRoutes from "@/routes/document.routes";
 
-if (!fs.existsSync("uploads")) {
-    fs.mkdirSync("uploads")
-}
 dotenv.config();
 
 const app = express();
