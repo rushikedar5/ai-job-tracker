@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import prisma from "../libs/prisma";
 import aiClient from "../libs/groq";
-import fs from "fs";
 import pdfParse from "pdf-parse";
+import axios from "axios";
 
 export const uploadDocument = async (req: Request, res: Response) => {
   const file = req.file;
@@ -25,7 +25,10 @@ export const uploadDocument = async (req: Request, res: Response) => {
       },
     });
 
-    const fileBuffer = fs.readFileSync(file.path);
+    const fileResponse = await axios.get(file.path, { 
+      responseType: "arraybuffer" 
+    })
+    const fileBuffer = Buffer.from(fileResponse.data)
     const pdfData = await pdfParse(fileBuffer);
     const resumeText = pdfData.text;
 
@@ -34,21 +37,20 @@ export const uploadDocument = async (req: Request, res: Response) => {
       messages: [
         {
           role: "system",
-          content:
-            "You are an expert HR consultant and resume reviewer. Always respond with valid JSON only. No markdown, no extra text.",
+          content: "You are an expert HR consultant and resume reviewer. Always respond with valid JSON only. No markdown, no extra text.",
         },
         {
           role: "user",
           content: `Review this resume and respond with this exact JSON structure:
-        {
-            "ats score": <number out of 100>,
-            "strengths": [<list of strings>],
-            "improvements": [<list of strings>],
-            "suggestions": [<list of strings>]
-        }
+{
+    "ats score": <number out of 100>,
+    "strengths": [<list of strings>],
+    "improvements": [<list of strings>],
+    "suggestions": [<list of strings>]
+}
 
-            Resume:
-            ${resumeText}`,
+Resume:
+${resumeText}`,
         },
       ],
     });
@@ -61,7 +63,7 @@ export const uploadDocument = async (req: Request, res: Response) => {
     });
   } catch (err) {
     return res.status(500).json({
-      message: "Internal server error" + err,
+      message: "Internal server error: " + err,
     });
   }
 };
