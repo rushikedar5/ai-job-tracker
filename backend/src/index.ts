@@ -4,11 +4,6 @@ import cors from "cors";
 import authRoutes from "@/routes/auth.routes"
 import applicationRoutes from "@/routes/application.route";
 import documentRoutes from "@/routes/document.routes";
-import fs from "fs"
-
-if (!fs.existsSync("uploads")) {
-    fs.mkdirSync("uploads")
-}
 
 dotenv.config();
 
