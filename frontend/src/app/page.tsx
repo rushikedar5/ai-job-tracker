@@ -31,7 +31,6 @@ export default function LandingPage() {
 
         <div className="mt-8 flex justify-center gap-4">
 
-          {/* ✅ Changed */}
           {isLoggedIn ? (
             <Link href="/applications/new">
               <Button size="lg">Add Application</Button>
@@ -87,11 +86,21 @@ export default function LandingPage() {
         </p>
 
         <div className="mt-6">
-          <Link href="/signup">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-200">
-              Get Started for Free
-            </Button>
-          </Link>
+
+          {isLoggedIn ? (
+            <Link href="/applications/new">
+              <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+                Add Application
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+                Get Started for Free
+              </Button>
+            </Link>
+          )}
+
         </div>
       </section>
 
