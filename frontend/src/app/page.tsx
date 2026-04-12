@@ -2,8 +2,16 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
 
 export default function LandingPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    setIsLoggedIn(!!token)
+  }, [])
+
   return (
     <div className="min-h-screen bg-gray-50">
 
@@ -22,9 +30,17 @@ export default function LandingPage() {
         </p>
 
         <div className="mt-8 flex justify-center gap-4">
-          <Link href="/signup">
-            <Button size="lg">Get Started</Button>
-          </Link>
+
+          {/* ✅ Changed */}
+          {isLoggedIn ? (
+            <Link href="/applications/new">
+              <Button size="lg">Add Application</Button>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <Button size="lg">Get Started</Button>
+            </Link>
+          )}
 
           <Link href="/dashboard">
             <Button variant="outline" size="lg">
