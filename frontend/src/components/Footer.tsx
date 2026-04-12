@@ -27,7 +27,7 @@ export default function Footer() {
 
           {/* Brand (takes more space) */}
           <div className="md:col-span-2 space-y-3">
-            <h2 className="text-lg font-semibold">JobTracker</h2>
+            <h2 className="text-lg font-semibold">HireVault</h2>
             <p className="text-sm text-gray-500 max-w-md">
               Track your job applications, manage progress, and land your next opportunity faster.
             </p>
@@ -81,7 +81,7 @@ export default function Footer() {
         <div className="border-t mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
 
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} JobTracker. All rights reserved.
+            © {new Date().getFullYear()} HireVault. All rights reserved.
           </p>
 
           <div className="flex gap-4 text-sm text-gray-500">

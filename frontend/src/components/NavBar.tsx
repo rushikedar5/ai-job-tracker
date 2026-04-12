@@ -54,7 +54,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
 
         <Link href="/" className="font-semibold text-lg">
-          JobTracker
+          HireVault
         </Link>
 
         <div className="flex items-center gap-6 text-sm">
