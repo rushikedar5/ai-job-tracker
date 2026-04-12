@@ -14,6 +14,8 @@ model User {
   application         Application[]   
   document            Document[] 
   createdAt           DateTime        @default(now())
+  plan                String          @default("free")
+  reviewCount         Int             @default(0)
 }
 
 enum ApplicationStatus {

@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "@/routes/auth.routes"
 import applicationRoutes from "@/routes/application.route";
 import documentRoutes from "@/routes/document.routes";
+import paymentRoutes from "@/routes/payment.route"
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use(
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/applications", applicationRoutes);
 app.use("/api/v1/documents", documentRoutes);
+app.use("/api/v1/payments", paymentRoutes)
 
 const PORT = process.env.PORT || 8001;
 app.listen(PORT, () => {

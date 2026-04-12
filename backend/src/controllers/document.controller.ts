@@ -17,6 +17,14 @@ export const uploadDocument = async (req: Request, res: Response) => {
   }
 
   try {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (user?.plan === "free" && user?.reviewCount >= 5) {
+      return res.status(403).json({
+        message: "Free limit reached. Upgrade to Pro.",
+      });
+    }
+
     const fileContent = await prisma.document.create({
       data: {
         filename: file.originalname,
@@ -25,10 +33,10 @@ export const uploadDocument = async (req: Request, res: Response) => {
       },
     });
 
-    const fileResponse = await axios.get(file.path, { 
-      responseType: "arraybuffer" 
-    })
-    const fileBuffer = Buffer.from(fileResponse.data)
+    const fileResponse = await axios.get(file.path, {
+      responseType: "arraybuffer",
+    });
+    const fileBuffer = Buffer.from(fileResponse.data);
     const pdfData = await pdfParse(fileBuffer);
     const resumeText = pdfData.text;
 
@@ -37,7 +45,8 @@ export const uploadDocument = async (req: Request, res: Response) => {
       messages: [
         {
           role: "system",
-          content: "You are an expert HR consultant and resume reviewer. Always respond with valid JSON only. No markdown, no extra text.",
+          content:
+            "You are an expert HR consultant and resume reviewer. Always respond with valid JSON only. No markdown, no extra text.",
         },
         {
           role: "user",
@@ -56,6 +65,11 @@ ${resumeText}`,
     });
 
     const feedback = JSON.parse(response.choices[0].message.content!);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { reviewCount: { increment: 1 } },
+    });
 
     return res.status(201).json({
       document: fileContent,
