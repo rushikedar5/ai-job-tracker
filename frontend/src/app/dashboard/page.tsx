@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import api from "@/lib/axios"
 import { Application } from "@/types"
@@ -16,22 +16,19 @@ const statusColors: Record<string, string> = {
   WITHDRAWN: "bg-gray-100 text-gray-800",
 }
 
-function DashboardContent() {
+export default function DashboardPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const upgraded = searchParams.get("upgraded")
+
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
-  const [plan, setPlan] = useState<"FREE" | "PRO">("FREE")
 
   useEffect(() => {
     const fetchApplications = async () => {
       try {
         const response = await api.get("/applications")
         setApplications(response.data.application || [])
-        if (response.data.user?.plan) {
-          setPlan(response.data.user.plan)
-        }
       } catch (err) {
         router.push("/signin")
       } finally {
@@ -52,22 +49,29 @@ function DashboardContent() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-5xl mx-auto">
+
+        {/* Upgrade success banner */}
         {upgraded && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800 text-sm mb-6">
             Successfully upgraded to Pro! Enjoy unlimited AI reviews.
           </div>
         )}
+
+        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight">My Applications</h1>
-            <p className="text-sm text-gray-500 mt-1">Track and manage your job applications</p>
+            <h1 className="text-3xl font-semibold tracking-tight">
+              My Applications
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Track and manage your job applications
+            </p>
           </div>
+
           <div className="flex gap-3">
-            {plan === "FREE" && (
-              <Link href="/pricing">
-                <Button variant="outline">Upgrade to Pro</Button>
-              </Link>
-            )}
+            <Link href="/pricing">
+              <Button variant="outline">Upgrade to Pro</Button>
+            </Link>
             <Link href="/upload">
               <Button variant="outline">AI Resume Review</Button>
             </Link>
@@ -77,10 +81,15 @@ function DashboardContent() {
           </div>
         </div>
 
+        {/* Empty State */}
         {applications.length === 0 ? (
           <div className="flex flex-col items-center justify-center border rounded-xl py-20 bg-white">
-            <p className="text-lg font-medium text-gray-700">No applications yet</p>
-            <p className="text-sm text-gray-500 mt-2 mb-4">Start tracking your job applications now</p>
+            <p className="text-lg font-medium text-gray-700">
+              No applications yet
+            </p>
+            <p className="text-sm text-gray-500 mt-2 mb-4">
+              Start tracking your job applications now
+            </p>
             <Link href="/applications/new">
               <Button>Add Your First Application</Button>
             </Link>
@@ -88,7 +97,10 @@ function DashboardContent() {
         ) : (
           <div className="grid gap-4">
             {applications.map((app) => (
-              <div key={app.id} className="bg-white border rounded-xl p-6 flex items-center justify-between hover:shadow-md transition">
+              <div
+                key={app.id}
+                className="bg-white border rounded-xl p-6 flex items-center justify-between hover:shadow-md transition"
+              >
                 <div>
                   <h2 className="text-lg font-semibold">{app.company}</h2>
                   <p className="text-gray-600">{app.role}</p>
@@ -96,6 +108,7 @@ function DashboardContent() {
                     Applied {new Date(app.appliedAt).toLocaleDateString()}
                   </p>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[app.status]}`}>
                     {app.status}
@@ -110,13 +123,5 @@ function DashboardContent() {
         )}
       </div>
     </div>
-  )
-}
-
-export default function DashboardPage() {
-  return (
-    <Suspense fallback={<div className="p-8">Loading...</div>}>
-      <DashboardContent />
-    </Suspense>
   )
 }
