@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import api from "@/lib/axios"
 import { Application } from "@/types"
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,8 @@ const statusColors: Record<string, string> = {
 
 export default function DashboardPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const upgraded = searchParams.get("upgraded")
 
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(true)
@@ -33,11 +35,9 @@ export default function DashboardPage() {
         setLoading(false)
       }
     }
-
     fetchApplications()
   }, [router])
 
-  // 🔄 Loading State
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-500">
@@ -48,12 +48,17 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-
       <div className="max-w-5xl mx-auto">
+
+        {/* Upgrade success banner */}
+        {upgraded && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800 text-sm mb-6">
+            Successfully upgraded to Pro! Enjoy unlimited AI reviews.
+          </div>
+        )}
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">
               My Applications
@@ -64,10 +69,12 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex gap-3">
+            <Link href="/pricing">
+              <Button variant="outline">Upgrade to Pro</Button>
+            </Link>
             <Link href="/upload">
               <Button variant="outline">AI Resume Review</Button>
             </Link>
-
             <Link href="/applications/new">
               <Button>Add Application</Button>
             </Link>
@@ -83,55 +90,35 @@ export default function DashboardPage() {
             <p className="text-sm text-gray-500 mt-2 mb-4">
               Start tracking your job applications now
             </p>
-
             <Link href="/applications/new">
               <Button>Add Your First Application</Button>
             </Link>
           </div>
         ) : (
-          /* Applications List */
           <div className="grid gap-4">
-
             {applications.map((app) => (
               <div
                 key={app.id}
                 className="bg-white border rounded-xl p-6 flex items-center justify-between hover:shadow-md transition"
               >
-                {/* Left */}
                 <div>
-                  <h2 className="text-lg font-semibold">
-                    {app.company}
-                  </h2>
-
-                  <p className="text-gray-600">
-                    {app.role}
-                  </p>
-
+                  <h2 className="text-lg font-semibold">{app.company}</h2>
+                  <p className="text-gray-600">{app.role}</p>
                   <p className="text-sm text-gray-400 mt-1">
-                    Applied{" "}
-                    {new Date(app.appliedAt).toLocaleDateString()}
+                    Applied {new Date(app.appliedAt).toLocaleDateString()}
                   </p>
                 </div>
 
-                {/* Right */}
                 <div className="flex items-center gap-3">
-
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[app.status]}`}
-                  >
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[app.status]}`}>
                     {app.status}
                   </span>
-
                   <Link href={`/applications/${app.id}`}>
-                    <Button variant="outline" size="sm">
-                      View
-                    </Button>
+                    <Button variant="outline" size="sm">View</Button>
                   </Link>
-
                 </div>
               </div>
             ))}
-
           </div>
         )}
       </div>

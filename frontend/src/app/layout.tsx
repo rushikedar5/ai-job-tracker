@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import Script from "next/script"
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -35,6 +36,8 @@ export default function RootLayout({
       <Navbar />
       <body className="min-h-full flex flex-col">{children}</body>
       <Footer />
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
     </html>
+    
   );
 }
