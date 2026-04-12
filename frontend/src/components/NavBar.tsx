@@ -10,10 +10,14 @@ export default function Navbar() {
   const pathname = usePathname()
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [plan, setPlan] = useState<"FREE" | "PRO">("FREE")
 
   const checkAuth = () => {
     const token = localStorage.getItem("token")
+    const userPlan = localStorage.getItem("plan") as "FREE" | "PRO" | null
+
     setIsLoggedIn(!!token)
+    setPlan(userPlan || "FREE")
   }
 
   useEffect(() => {
@@ -28,8 +32,8 @@ export default function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token")
+    localStorage.removeItem("plan")
 
-    // 🔥 THIS triggers UI update
     window.dispatchEvent(new Event("authChanged"))
 
     router.push("/signin")
@@ -90,6 +94,15 @@ export default function Navbar() {
           >
             AI Review
           </Link>
+
+          {/* ✅ Upgrade only for FREE users */}
+          {isLoggedIn && plan === "FREE" && (
+            <Link href="/pricing">
+              <span className="text-blue-600 font-medium hover:underline">
+                Upgrade
+              </span>
+            </Link>
+          )}
 
         </div>
 

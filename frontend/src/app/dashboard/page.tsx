@@ -1,10 +1,6 @@
-// app/dashboard/page.tsx
-
-export const dynamic = "force-dynamic"
-
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import api from "@/lib/axios"
 import { Application } from "@/types"
@@ -20,23 +16,22 @@ const statusColors: Record<string, string> = {
   WITHDRAWN: "bg-gray-100 text-gray-800",
 }
 
-function DashboardContent() {
+export default function DashboardPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const upgraded = searchParams.get("upgraded")
 
   const [applications, setApplications] = useState<Application[]>([])
-  const [plan, setPlan] = useState<"FREE" | "PRO">("FREE")
   const [loading, setLoading] = useState(true)
+  const [plan, setPlan] = useState<"FREE" | "PRO">("FREE") // ✅ added
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchApplications = async () => {
       try {
         const response = await api.get("/applications")
-
         setApplications(response.data.application || [])
 
-        // ✅ Get user plan (adjust based on your backend response)
+        // ✅ get plan
         if (response.data.user?.plan) {
           setPlan(response.data.user.plan)
         }
@@ -47,8 +42,7 @@ function DashboardContent() {
         setLoading(false)
       }
     }
-
-    fetchData()
+    fetchApplications()
   }, [router])
 
   if (loading) {
@@ -63,14 +57,12 @@ function DashboardContent() {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-5xl mx-auto">
 
-        {/* Upgrade success banner (only show once + only for PRO) */}
-        {upgraded && plan === "PRO" && (
+        {upgraded && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800 text-sm mb-6">
             Successfully upgraded to Pro! Enjoy unlimited AI reviews.
           </div>
         )}
 
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">
@@ -83,7 +75,7 @@ function DashboardContent() {
 
           <div className="flex gap-3">
 
-            {/* ✅ Show only for FREE users */}
+            {/* ✅ ONLY for FREE users */}
             {plan === "FREE" && (
               <Link href="/pricing">
                 <Button variant="outline">Upgrade to Pro</Button>
@@ -100,7 +92,6 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* Empty State */}
         {applications.length === 0 ? (
           <div className="flex flex-col items-center justify-center border rounded-xl py-20 bg-white">
             <p className="text-lg font-medium text-gray-700">
@@ -132,11 +123,8 @@ function DashboardContent() {
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[app.status]}`}>
                     {app.status}
                   </span>
-
                   <Link href={`/applications/${app.id}`}>
-                    <Button variant="outline" size="sm">
-                      View
-                    </Button>
+                    <Button variant="outline" size="sm">View</Button>
                   </Link>
                 </div>
               </div>
@@ -145,13 +133,5 @@ function DashboardContent() {
         )}
       </div>
     </div>
-  )
-}
-
-export default function DashboardPage() {
-  return (
-    <Suspense fallback={<div className="p-8">Loading...</div>}>
-      <DashboardContent />
-    </Suspense>
   )
 }
