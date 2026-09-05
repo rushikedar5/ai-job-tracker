@@ -3,8 +3,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | JobTracker",
-  description: "Learn how JobTracker collects and protects your data.",
+  title: "Privacy Policy | HireVault",
+  description: "Learn how HireVault collects and protects your data.",
 }
 
 const sections = [
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
 
         <p className="text-gray-600 leading-relaxed">
           Your privacy is important to us. This Privacy Policy explains how
-          JobTracker collects, uses, and protects your information when you use
+          HireVault collects, uses, and protects your information when you use
           our platform.
         </p>
 
@@ -62,10 +62,10 @@ export default function PrivacyPage() {
                 </p>
 
                 <a
-                  href="mailto:privacy@jobtracker.com"
+                  href="mailto:privacy@hirevault.com"
                   className="text-blue-600 font-medium hover:underline"
                 >
-                  privacy@jobtracker.com
+                  privacy@hirevault.com
                 </a>
               </>
             )}

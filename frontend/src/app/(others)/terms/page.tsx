@@ -3,8 +3,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Terms of Service | JobTracker",
-  description: "Read the terms and conditions for using JobTracker.",
+  title: "Terms of Service | HireVault",
+  description: "Read the terms and conditions for using HireVault.",
 }
 
 const sections = [
@@ -28,7 +28,7 @@ export default function TermsPage() {
         </h1>
 
         <p className="text-gray-600 leading-relaxed">
-          By accessing or using JobTracker, you agree to be bound by these Terms
+          By accessing or using HireVault, you agree to be bound by these Terms
           of Service. Please read them carefully.
         </p>
 
@@ -61,10 +61,10 @@ export default function TermsPage() {
                 </p>
 
                 <a
-                  href="mailto:legal@jobtracker.com"
+                  href="mailto:legal@hirevault.com"
                   className="text-blue-600 font-medium hover:underline"
                 >
-                  legal@jobtracker.com
+                  legal@hirevault.com
                 </a>
               </>
             )}

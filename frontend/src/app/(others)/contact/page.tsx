@@ -3,8 +3,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Contact Us | JobTracker",
-  description: "Get in touch with JobTracker for support, feedback, or queries.",
+  title: "Contact Us | HireVault",
+  description: "Get in touch with HireVault for support, feedback, or queries.",
 }
 
 export default function ContactPage() {
@@ -34,10 +34,10 @@ export default function ContactPage() {
         </p>
 
         <a
-          href="mailto:support@jobtracker.com"
+          href="mailto:support@hirevault.com"
           className="text-lg font-medium text-blue-600 hover:underline break-all"
         >
-          support@jobtracker.com
+          support@hirevault.com
         </a>
 
         <p className="text-sm text-gray-500">

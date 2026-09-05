@@ -36,12 +36,18 @@ export const uploadDocument = async (req: Request, res: Response) => {
     const fileResponse = await axios.get(file.path, {
       responseType: "arraybuffer",
     });
+    
+    console.log("File PATH:", file.path);
+    console.log("File Response Headers:", fileResponse.headers);
+    console.log("Buffer length:", fileResponse.data.byteLength);
+
     const fileBuffer = Buffer.from(fileResponse.data);
     const pdfData = await pdfParse(fileBuffer);
     const resumeText = pdfData.text;
 
     const response = await aiClient.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-20b",
+      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
@@ -64,7 +70,16 @@ ${resumeText}`,
       ],
     });
 
-    const feedback = JSON.parse(response.choices[0].message.content!);
+    const rawContent = response.choices[0].message.content || "{}";
+    const cleanContent = rawContent.replace(/```json\n?|\n?```/g, "").trim();
+    
+    let feedback;
+    try {
+      feedback = JSON.parse(cleanContent);
+    } catch (parseError) {
+      console.error("JSON Parse Error:", parseError, "Raw content:", rawContent);
+      return res.status(500).json({ message: "Failed to parse AI response" });
+    }
 
     await prisma.user.update({
       where: { id: userId },
@@ -75,9 +90,10 @@ ${resumeText}`,
       document: fileContent,
       feedback,
     });
-  } catch (err) {
+  } catch (err: any) {
+    console.error("Upload Document Error:", err.message || err);
     return res.status(500).json({
-      message: "Internal server error: " + err,
+      message: err.message || "Failed to process resume upload.",
     });
   }
 };

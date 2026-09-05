@@ -3,17 +3,17 @@
 export default function AboutPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-16 space-y-8">
-      <h1 className="text-3xl font-semibold">About JobTracker</h1>
+      <h1 className="text-3xl font-semibold">About HireVault</h1>
 
       <p className="text-gray-600">
-        JobTracker is an AI-powered platform designed to simplify and improve
+        HireVault is an AI-powered platform designed to simplify and improve
         the job application process. Managing multiple applications across
         companies can be overwhelming — we bring everything into one place.
       </p>
 
       <p className="text-gray-600">
         With built-in tracking, structured workflows, and AI-powered resume
-        analysis, JobTracker helps you stay organized and make better decisions
+        analysis, HireVault helps you stay organized and make better decisions
         during your job search.
       </p>
 

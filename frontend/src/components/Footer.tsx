@@ -11,7 +11,6 @@ export default function Footer() {
     path: string
   ) => {
     const token = localStorage.getItem("token")
-
     if (!token) {
       e.preventDefault()
       router.push("/signin")
@@ -19,76 +18,45 @@ export default function Footer() {
   }
 
   return (
-    <footer className="w-full border-t bg-white mt-16">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-
-          {/* Brand (takes more space) */}
-          <div className="md:col-span-2 space-y-3">
-            <h2 className="text-lg font-semibold">HireVault</h2>
-            <p className="text-sm text-gray-500 max-w-md">
-              Track your job applications, manage progress, and land your next opportunity faster.
+    <footer className="border-t border-border/40 bg-muted/20 mt-auto">
+      <div className="mx-auto max-w-7xl px-6 py-12 md:py-16 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
+          {/* Brand */}
+          <div className="md:col-span-2">
+            <Link href="/" className="inline-flex items-center text-xl font-semibold tracking-tight text-foreground mb-4 transition-colors hover:text-primary">
+              HireVault
+              <span className="ml-1 inline-block h-2 w-2 rounded-full bg-primary" />
+            </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+              A focused workspace for people who want to take control of their job search.
             </p>
           </div>
-
+          
           {/* Product */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium text-gray-900">Product</h3>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-
-              <Link
-                href="/dashboard"
-                onClick={(e) => handleProtectedRoute(e, "/dashboard")}
-                className="hover:text-black"
-              >
-                Dashboard
-              </Link>
-
-              <Link
-                href="/applications/new"
-                onClick={(e) => handleProtectedRoute(e, "/applications/new")}
-                className="hover:text-black"
-              >
-                Add Application
-              </Link>
-
-              <Link
-                href="/upload"
-                onClick={(e) => handleProtectedRoute(e, "/upload")}
-                className="hover:text-black"
-              >
-                AI Resume Review
-              </Link>
-
-            </div>
+          <div>
+            <h4 className="text-xs font-bold text-foreground tracking-widest uppercase mb-6">Product</h4>
+            <ul className="space-y-4 text-sm text-muted-foreground">
+              <li><Link href="/dashboard" onClick={(e) => handleProtectedRoute(e, "/dashboard")} className="transition-colors hover:text-foreground">Dashboard</Link></li>
+              <li><Link href="/applications/new" onClick={(e) => handleProtectedRoute(e, "/applications/new")} className="transition-colors hover:text-foreground">Add Application</Link></li>
+              <li><Link href="/upload" onClick={(e) => handleProtectedRoute(e, "/upload")} className="transition-colors hover:text-foreground">AI Review</Link></li>
+            </ul>
           </div>
 
           {/* Company */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium text-gray-900">Company</h3>
-            <div className="flex flex-col gap-2 text-sm text-gray-500">
-              <Link href="/about" className="hover:text-black">About</Link>
-              <Link href="/career" className="hover:text-black">Careers</Link>
-              <Link href="/contact" className="hover:text-black">Contact</Link>
-            </div>
+          <div>
+            <h4 className="text-xs font-bold text-foreground tracking-widest uppercase mb-6">Company</h4>
+            <ul className="space-y-4 text-sm text-muted-foreground">
+              <li><Link href="/about" className="transition-colors hover:text-foreground">About</Link></li>
+              <li><Link href="/career" className="transition-colors hover:text-foreground">Careers</Link></li>
+              <li><Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link></li>
+            </ul>
           </div>
-
         </div>
-
-        {/* Divider */}
-        <div className="border-t mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-
-          <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} HireVault. All rights reserved.
-          </p>
-
-          <div className="flex gap-4 text-sm text-gray-500">
-            <Link href="/privacy" className="hover:text-black">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-black">Terms of Service</Link>
-          </div>
-
+        
+        {/* Bottom */}
+        <div className="mt-16 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-muted-foreground/60">
+          <span>© {new Date().getFullYear()} HireVault</span>
+          <span>Built for candidates, not clutter.</span>
         </div>
       </div>
     </footer>

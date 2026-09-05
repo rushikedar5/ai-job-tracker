@@ -3,8 +3,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Careers | JobTracker",
-  description: "Explore career opportunities at JobTracker and join our mission to improve job searching.",
+  title: "Careers | HireVault",
+  description: "Explore career opportunities at HireVault and join our mission to improve job searching.",
 }
 
 export default function CareersPage() {
@@ -13,7 +13,7 @@ export default function CareersPage() {
       {/* Heading */}
       <header className="mb-10 space-y-3">
         <h1 className="text-3xl font-semibold tracking-tight">
-          Careers at JobTracker
+          Careers at HireVault
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
           We’re building tools to improve how people approach job searching —
@@ -37,7 +37,7 @@ export default function CareersPage() {
 
         {/* CTA */}
         {/* <a
-          href="mailto:careers@jobtracker.com"
+          href="mailto:careers@hirevault.com"
           className="inline-block mt-3 text-blue-600 font-medium hover:underline"
         >
           Send us your resume →
