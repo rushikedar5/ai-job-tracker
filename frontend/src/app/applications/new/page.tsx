@@ -157,15 +157,15 @@ export default function NewApplicationPage() {
             </form>
           </CardContent>
 
-          <CardFooter className="flex justify-end gap-3 pt-6">
-            <Link href="/dashboard">
-              <Button variant="ghost" type="button">Cancel</Button>
+          <CardFooter className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-6">
+            <Link href="/dashboard" className="w-full sm:w-auto">
+              <Button variant="ghost" type="button" className="w-full sm:w-auto">Cancel</Button>
             </Link>
             <Button 
               type="submit" 
               form="add-app-form" 
               disabled={loading}
-              className="px-6 shadow-md"
+              className="w-full sm:w-auto px-6 shadow-md"
             >
               {loading ? "Saving..." : (
                 <>

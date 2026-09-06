@@ -173,7 +173,7 @@ function DashboardContent() {
           
           {applications.length === 0 ? (
             <Card className="border-dashed border-2 shadow-sm bg-transparent">
-              <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="flex flex-col items-center justify-center py-16 sm:py-20 text-center px-4">
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-4">
                   <Briefcase className="h-6 w-6 text-primary" />
                 </div>
@@ -182,51 +182,84 @@ function DashboardContent() {
                   Start building your pipeline by adding your first job application to the vault.
                 </p>
                 <Link href="/applications/new">
-                  <Button>Add Your First Application</Button>
+                  <Button className="w-full sm:w-auto">Add Your First Application</Button>
                 </Link>
               </div>
             </Card>
           ) : (
-            <Card className="shadow-sm border-border/50 overflow-hidden">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader className="bg-muted/50">
-                    <TableRow>
-                      <TableHead className="w-[300px] font-dm-mono text-xs uppercase tracking-wider">Company & Role</TableHead>
-                      <TableHead className="font-dm-mono text-xs uppercase tracking-wider">Status</TableHead>
-                      <TableHead className="font-dm-mono text-xs uppercase tracking-wider">Applied Date</TableHead>
-                      <TableHead className="text-right font-dm-mono text-xs uppercase tracking-wider">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {applications.map((app) => (
-                      <TableRow key={app.id} className="group hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => router.push(`/applications/${app.id}`)}>
-                        <TableCell>
-                          <div className="font-medium text-foreground">{app.company}</div>
-                          <div className="text-sm text-muted-foreground mt-0.5">{app.role}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className={`font-medium ${statusColors[app.status]}`}>
-                            {app.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <Calendar className="mr-2 h-3.5 w-3.5" />
-                            {new Date(app.appliedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                            <ChevronRight className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+            <>
+              {/* Mobile: Card Layout */}
+              <div className="md:hidden space-y-3">
+                {applications.map((app) => (
+                  <Card 
+                    key={app.id} 
+                    className="shadow-sm border-border/50 active:bg-muted/30 transition-colors cursor-pointer"
+                    onClick={() => router.push(`/applications/${app.id}`)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-foreground truncate">{app.company}</p>
+                          <p className="text-sm text-muted-foreground truncate mt-0.5">{app.role}</p>
+                        </div>
+                        <Badge variant="outline" className={`shrink-0 font-medium text-xs ${statusColors[app.status]}`}>
+                          {app.status}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <Calendar className="mr-1.5 h-3 w-3" />
+                          {new Date(app.appliedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-            </Card>
+
+              {/* Desktop: Table Layout */}
+              <Card className="hidden md:block shadow-sm border-border/50 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader className="bg-muted/50">
+                      <TableRow>
+                        <TableHead className="w-[300px] font-dm-mono text-xs uppercase tracking-wider">Company & Role</TableHead>
+                        <TableHead className="font-dm-mono text-xs uppercase tracking-wider">Status</TableHead>
+                        <TableHead className="font-dm-mono text-xs uppercase tracking-wider">Applied Date</TableHead>
+                        <TableHead className="text-right font-dm-mono text-xs uppercase tracking-wider">Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {applications.map((app) => (
+                        <TableRow key={app.id} className="group hover:bg-muted/50 transition-colors cursor-pointer" onClick={() => router.push(`/applications/${app.id}`)}>
+                          <TableCell>
+                            <div className="font-medium text-foreground">{app.company}</div>
+                            <div className="text-sm text-muted-foreground mt-0.5">{app.role}</div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className={`font-medium ${statusColors[app.status]}`}>
+                              {app.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <Calendar className="mr-2 h-3.5 w-3.5" />
+                              {new Date(app.appliedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
+            </>
           )}
         </div>
       </div>

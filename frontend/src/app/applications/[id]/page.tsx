@@ -122,48 +122,53 @@ export default function ApplicationPage() {
   if (!application) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-[calc(100vh-64px)] bg-gray-50/50 dark:bg-black p-4 sm:p-6 lg:p-8">
 
       <div className="max-w-2xl mx-auto space-y-6">
 
-        <div className="flex items-center justify-between">
-          <Link href="/dashboard">
-            <Button variant="outline">Back</Button>
+        {/* Top bar */}
+        <div className="flex items-center justify-between gap-3">
+          <Link href="/dashboard" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="m15 18-6-6 6-6"/></svg>
+            Back
           </Link>
 
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" size="sm" onClick={handleDelete} className="active:scale-95 transition-transform">
             Delete
           </Button>
         </div>
 
-        <div className="bg-white border rounded-xl p-6 space-y-6">
-
-          <div>
-            <h1 className="text-2xl font-semibold">
+        {/* Main card */}
+        <div className="bg-background border border-border/50 rounded-2xl shadow-sm overflow-hidden">
+          {/* Header */}
+          <div className="p-5 sm:p-6 border-b border-border/40">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
               {application.company}
             </h1>
-
-            <p className="text-gray-600 text-lg">
+            <p className="text-base text-muted-foreground mt-0.5">
               {application.role}
             </p>
-
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-xs text-muted-foreground/60 mt-2">
               Applied{" "}
-              {new Date(application.appliedAt).toLocaleDateString()}
+              {new Date(application.appliedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
 
-          <div>
-            <h2 className="font-semibold mb-2">Job Description</h2>
-            <p className="text-sm text-gray-600 whitespace-pre-wrap">
-              {application.jobDescription}
-            </p>
-          </div>
+          {/* Job Description */}
+          {application.jobDescription && (
+            <div className="p-5 sm:p-6 border-b border-border/40">
+              <h2 className="text-sm font-bold text-foreground uppercase tracking-wider mb-3">Job Description</h2>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                {application.jobDescription}
+              </p>
+            </div>
+          )}
 
-          <div className="space-y-2">
-            <h2 className="font-semibold">Update Status</h2>
+          {/* Update Status */}
+          <div className="p-5 sm:p-6 space-y-4">
+            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Update Status</h2>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Select
                 value={status ?? undefined}
                 onValueChange={(val) => setStatus(val as StatusType)}
@@ -185,13 +190,14 @@ export default function ApplicationPage() {
               <Button
                 onClick={handleUpdateStatus}
                 disabled={updating}
+                className="w-full sm:w-auto active:scale-95 transition-transform"
               >
                 {updating ? "Saving..." : "Save"}
               </Button>
             </div>
 
             {success && (
-              <p className="text-sm text-green-600 font-medium">
+              <p className="text-sm text-green-600 dark:text-green-400 font-medium">
                 {success}
               </p>
             )}
