@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import prisma from "../libs/prisma";
-import aiClient from "../libs/groq";
+import { reviewResume, ReviewParseError, MIN_RESUME_CHARS } from "../libs/resumeReview";
 import pdfParse from "pdf-parse";
 import axios from "axios";
 
@@ -25,14 +25,6 @@ export const uploadDocument = async (req: Request, res: Response) => {
       });
     }
 
-    const fileContent = await prisma.document.create({
-      data: {
-        filename: file.originalname,
-        url: file.path,
-        userId,
-      },
-    });
-
     const fileResponse = await axios.get(file.path, {
       responseType: "arraybuffer",
     });
@@ -43,43 +35,36 @@ export const uploadDocument = async (req: Request, res: Response) => {
 
     const fileBuffer = Buffer.from(fileResponse.data);
     const pdfData = await pdfParse(fileBuffer);
-    const resumeText = pdfData.text;
+    const resumeText = pdfData.text.trim();
 
-    const response = await aiClient.chat.completions.create({
-      model: "openai/gpt-oss-20b",
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an expert HR consultant and resume reviewer. Always respond with valid JSON only. No markdown, no extra text.",
-        },
-        {
-          role: "user",
-          content: `Review this resume and respond with this exact JSON structure:
-{
-    "ats score": <number out of 100>,
-    "strengths": [<list of strings>],
-    "improvements": [<list of strings>],
-    "suggestions": [<list of strings>]
-}
+    // Scanned or image-only PDFs have no text layer; don't ask the model to review nothing.
+    if (resumeText.length < MIN_RESUME_CHARS) {
+      return res.status(422).json({
+        message: "We couldn't read text from this PDF. Please upload a text-based PDF, not a scan or image.",
+      });
+    }
 
-Resume:
-${resumeText}`,
-        },
-      ],
-    });
-
-    const rawContent = response.choices[0].message.content || "{}";
-    const cleanContent = rawContent.replace(/```json\n?|\n?```/g, "").trim();
-    
     let feedback;
     try {
-      feedback = JSON.parse(cleanContent);
-    } catch (parseError) {
-      console.error("JSON Parse Error:", parseError, "Raw content:", rawContent);
-      return res.status(500).json({ message: "Failed to parse AI response" });
+      feedback = await reviewResume(resumeText);
+    } catch (reviewError) {
+      if (reviewError instanceof ReviewParseError) {
+        console.error(reviewError.message, "Raw outputs:", reviewError.rawOutputs);
+        return res.status(502).json({
+          message: "The AI returned an unusable response. Please try again.",
+        });
+      }
+      throw reviewError;
     }
+
+    // Save the document only after a successful review, so failures leave no orphan rows.
+    const fileContent = await prisma.document.create({
+      data: {
+        filename: file.originalname,
+        url: file.path,
+        userId,
+      },
+    });
 
     await prisma.user.update({
       where: { id: userId },

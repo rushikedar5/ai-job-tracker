@@ -6,6 +6,20 @@ import { Button } from "@/components/ui/button"
 import api from "@/lib/axios"
 import Link from "next/link"
 
+type RazorpayPaymentResponse = {
+    razorpay_order_id: string
+    razorpay_payment_id: string
+    razorpay_signature: string
+}
+
+type RazorpayInstance = { open: () => void }
+
+declare global {
+    interface Window {
+        Razorpay: new (options: Record<string, unknown>) => RazorpayInstance
+    }
+}
+
 export default function PricingPage() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
@@ -23,7 +37,7 @@ export default function PricingPage() {
                 name: "HireVault",
                 description: "Pro Plan - Unlimited AI Resume Reviews",
                 order_id: order.id,
-                handler: async (response: any) => {
+                handler: async (response: RazorpayPaymentResponse) => {
                     try {
                         await api.post("/payments/verify", {
                             razorpay_order_id: response.razorpay_order_id,
@@ -31,7 +45,7 @@ export default function PricingPage() {
                             razorpay_signature: response.razorpay_signature,
                         })
                         router.push("/dashboard?upgraded=true")
-                    } catch (err) {
+                    } catch {
                         alert("Payment verification failed")
                     }
                 },
@@ -44,9 +58,9 @@ export default function PricingPage() {
                 }
             }
 
-            const razor = new (window as any).Razorpay(options)
+            const razor = new window.Razorpay(options)
             razor.open()
-        } catch (err) {
+        } catch {
             alert("Failed to initiate payment")
         } finally {
             setLoading(false)

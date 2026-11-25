@@ -40,7 +40,7 @@ export default function ApplicationPage() {
         const response = await api.get(`/applications/${id}`)
         setApplication(response.data.application)
         setStatus(response.data.application.status)
-      } catch (err) {
+      } catch {
         router.push("/dashboard")
       } finally {
         setLoading(false)
@@ -69,7 +69,7 @@ export default function ApplicationPage() {
         setSuccess("")
       }, 2000)
 
-    } catch (err) {
+    } catch {
       console.error("Failed to update status")
     } finally {
       setUpdating(false)
@@ -102,7 +102,7 @@ export default function ApplicationPage() {
       })
 
       router.push("/dashboard")
-    } catch (err) {
+    } catch {
       Swal.fire({
         title: "Error",
         text: "Failed to delete application",

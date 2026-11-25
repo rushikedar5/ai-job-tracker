@@ -1,34 +1,24 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
+import { useIsLoggedIn } from "@/lib/useIsLoggedIn"
 import { Menu, X, LayoutDashboard, PlusCircle, Sparkles, LogOut } from "lucide-react"
 
 export default function Navbar() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const isLoggedIn = useIsLoggedIn()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const checkAuth = () => {
-    const token = localStorage.getItem("token")
-    setIsLoggedIn(!!token)
-  }
-
-  useEffect(() => {
-    checkAuth()
-    window.addEventListener("authChanged", checkAuth)
-    return () => {
-      window.removeEventListener("authChanged", checkAuth)
-    }
-  }, [])
-
-  // Close mobile menu on route change
-  useEffect(() => {
+  // Close mobile menu on route change (adjusting state during render, per React docs)
+  const [lastPathname, setLastPathname] = useState(pathname)
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname)
     setMobileMenuOpen(false)
-  }, [pathname])
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token")

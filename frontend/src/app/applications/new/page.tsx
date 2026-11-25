@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import api from "@/lib/axios"
+import { getErrorMessage } from "@/lib/errors"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -55,8 +56,8 @@ export default function NewApplicationPage() {
       })
 
       router.push("/dashboard")
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to create application")
+    } catch (err) {
+      setError(getErrorMessage(err, "Failed to create application"))
     } finally {
       setLoading(false)
     }

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import api from "@/lib/axios"
 import { Application } from "@/types"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
@@ -37,7 +37,7 @@ function DashboardContent() {
         if (response.data.user?.plan) {
           setPlan(response.data.user.plan)
         }
-      } catch (err) {
+      } catch {
         router.push("/signin")
       } finally {
         setLoading(false)

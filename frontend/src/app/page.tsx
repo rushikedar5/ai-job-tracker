@@ -1,22 +1,18 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
+import { useIsLoggedIn } from "@/lib/useIsLoggedIn"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Sparkles, LayoutDashboard, Target, BarChart3, LineChart, FileText, CheckCircle2 } from "lucide-react"
+import { ArrowRight, Sparkles, LayoutDashboard, Target, BarChart3, CheckCircle2 } from "lucide-react"
 
 export default function LandingPage() {
   const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const isLoggedIn = useIsLoggedIn()
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      router.push("/dashboard")
-    } else {
-      setIsLoggedIn(false)
-    }
-  }, [router])
+    if (isLoggedIn) router.push("/dashboard")
+  }, [isLoggedIn, router])
 
   return (
     <main className="flex-1 overflow-hidden">
@@ -184,7 +180,7 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="text-emerald-400 text-xs font-bold tracking-widest uppercase mb-4">Career Signals</div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">Know what is working.<br />Change what isn't.</h2>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">Know what is working.<br />Change what isn&apos;t.</h2>
               <p className="text-lg text-slate-300 mb-8 max-w-lg leading-relaxed">HireVault turns your application history into useful signals so you can spend less time guessing and more time improving.</p>
               <Link href="/dashboard" className="inline-flex items-center justify-center rounded-full bg-white text-[#071829] px-8 py-4 text-sm font-bold shadow-lg transition-transform hover:scale-105 active:scale-95">
                 View your insights <ArrowRight className="ml-2 w-4 h-4" />

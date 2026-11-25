@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
+import { getErrorMessage } from "@/lib/errors"
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, ChevronRight, FileText, Lightbulb, UploadCloud, XCircle } from "lucide-react";
 
@@ -17,7 +16,6 @@ type Feedback = {
 };
 
 export default function UploadPage() {
-  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [loading, setLoading] = useState(false);
@@ -38,8 +36,8 @@ export default function UploadPage() {
       });
 
       setFeedback(response.data.feedback);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to analyze resume");
+    } catch (err) {
+      setError(getErrorMessage(err, "Failed to analyze resume"));
     } finally {
       setLoading(false);
     }

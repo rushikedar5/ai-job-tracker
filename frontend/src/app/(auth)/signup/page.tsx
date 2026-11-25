@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import api from "@/lib/axios"
+import { getErrorMessage } from "@/lib/errors"
 import Link from "next/link"
 import { ArrowRight, Sparkles } from "lucide-react"
 
@@ -36,8 +37,8 @@ export default function SignUpPage() {
       })
 
       router.push("/signin")
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Signup failed")
+    } catch (err) {
+      setError(getErrorMessage(err, "Signup failed"))
     } finally {
       setLoading(false)
     }

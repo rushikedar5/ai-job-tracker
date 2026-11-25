@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import api from "@/lib/axios"
+import { getErrorMessage } from "@/lib/errors"
 import Link from "next/link"
 import { ArrowRight, Briefcase } from "lucide-react"
 
@@ -37,8 +38,8 @@ export default function SignInPage() {
       window.dispatchEvent(new Event("authChanged"))
       router.push("/dashboard")
 
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Invalid email or password")
+    } catch (err) {
+      setError(getErrorMessage(err, "Invalid email or password"))
     } finally {
       setLoading(false)
     }
