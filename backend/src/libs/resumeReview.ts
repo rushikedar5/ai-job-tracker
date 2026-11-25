@@ -23,9 +23,9 @@ const RESPONSE_FORMAT = {
       type: "object",
       properties: {
         "ats score": { type: "number" },
-        strengths: { type: "array", items: { type: "string" } },
-        improvements: { type: "array", items: { type: "string" } },
-        suggestions: { type: "array", items: { type: "string" } },
+        strengths: { type: "array", items: { type: "string" }, minItems: 1 },
+        improvements: { type: "array", items: { type: "string" }, minItems: 1 },
+        suggestions: { type: "array", items: { type: "string" }, minItems: 1 },
       },
       required: ["ats score", "strengths", "improvements", "suggestions"],
       additionalProperties: false,
@@ -48,9 +48,11 @@ export const feedbackSchema = z.object({
   "ats score": z.coerce
     .number()
     .transform((n) => Math.round(Math.min(100, Math.max(0, n)))),
-  strengths: z.array(z.string()).default([]),
-  improvements: z.array(z.string()).default([]),
-  suggestions: z.array(z.string()).default([]),
+  // Every section must have content: an empty or missing list is treated as an invalid reply
+  // and retried, instead of rendering as a blank section in the UI.
+  strengths: z.array(z.string().trim().min(1)).min(1),
+  improvements: z.array(z.string().trim().min(1)).min(1),
+  suggestions: z.array(z.string().trim().min(1)).min(1),
 });
 
 export type Feedback = z.infer<typeof feedbackSchema>;
@@ -73,6 +75,9 @@ const buildUserPrompt = (resumeText: string) => `Review this resume and respond 
     "improvements": [<list of strings>],
     "suggestions": [<list of strings>]
 }
+
+Give 3 to 6 specific items in each of "strengths", "improvements" and "suggestions". Never leave a list empty.
+"improvements" are weaknesses in the current resume; "suggestions" are concrete next steps to make it stronger.
 
 <resume>
 ${resumeText}
